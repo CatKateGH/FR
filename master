@@ -13,3 +13,126 @@ CREATE TABLE IF NOT EXISTS `circusss`.`workers` (
   `phone` VARCHAR(20) NULL,
   PRIMARY KEY (`id_workers`))
 ENGINE = InnoDB;
+-- -----------------------------------------------------
+-- Table `circusss`.`troupe`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `circusss`.`troupe` (
+  `id_troupe` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id_troupe`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `circusss`.`program`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `circusss`.`program` (
+  `id_pr` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id_pr`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `circusss`.`shows`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `circusss`.`shows` (
+  `id_shows` INT NOT NULL AUTO_INCREMENT,
+  `show_name` VARCHAR(45) NULL,
+  `rez` VARCHAR(60) NULL,
+  `hud` VARCHAR(60) NULL,
+  `muz` VARCHAR(60) NULL,
+  `autor` VARCHAR(60) NULL,
+  `genre` VARCHAR(45) NULL,
+  `type` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_shows`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `circusss`.`tour`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `circusss`.`tour` (
+  `id_tour` INT NOT NULL AUTO_INCREMENT,
+  `id_show` INT NOT NULL,
+  `date_st` DATE NULL,
+  `date_end` DATE NULL,
+  `city_tour` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_tour`),
+  INDEX `fk_tour_shows1_idx` (`id_show` ASC) VISIBLE,
+  CONSTRAINT `fk_tour_shows1`
+    FOREIGN KEY (`id_show`)
+    REFERENCES `circusss`.`shows` (`id_shows`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `circusss`.`worker_troupe`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `circusss`.`worker_troupe` (
+  `id_worker` INT NOT NULL,
+  `id_troupe` INT NOT NULL,
+  `role` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_worker`, `id_troupe`),
+  INDEX `fk_workers_has_troupe_troupe1_idx` (`id_troupe` ASC) VISIBLE,
+  INDEX `fk_workers_has_troupe_workers_idx` (`id_worker` ASC) VISIBLE,
+  CONSTRAINT `fk_workers_has_troupe_workers`
+    FOREIGN KEY (`id_worker`)
+    REFERENCES `circusss`.`workers` (`id_workers`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_workers_has_troupe_troupe1`
+    FOREIGN KEY (`id_troupe`)
+    REFERENCES `circusss`.`troupe` (`id_troupe`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `circusss`.`troupe_play_shows`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `circusss`.`troupe_play_shows` (
+  `id_troupe` INT NOT NULL,
+  `id_shows` INT NOT NULL,
+  PRIMARY KEY (`id_troupe`, `id_shows`),
+  INDEX `fk_troupe_has_shows_shows1_idx` (`id_shows` ASC) VISIBLE,
+  INDEX `fk_troupe_has_shows_troupe1_idx` (`id_troupe` ASC) VISIBLE,
+  CONSTRAINT `fk_troupe_has_shows_troupe1`
+    FOREIGN KEY (`id_troupe`)
+    REFERENCES `circusss`.`troupe` (`id_troupe`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_troupe_has_shows_shows1`
+    FOREIGN KEY (`id_shows`)
+    REFERENCES `circusss`.`shows` (`id_shows`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `circusss`.`program_has_shows`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `circusss`.`program_has_shows` (
+  `id_pr` INT NOT NULL,
+  `id_shows` INT NOT NULL,
+  `date_new` DATE NULL,
+  `period_show` VARCHAR(40) NULL,
+  `time_show` VARCHAR(30) NULL,
+  `price` DECIMAL(10,2) NULL,
+  PRIMARY KEY (`id_pr`, `id_shows`),
+  INDEX `fk_program_has_shows_shows1_idx` (`id_shows` ASC) VISIBLE,
+  INDEX `fk_program_has_shows_program1_idx` (`id_pr` ASC) VISIBLE,
+  CONSTRAINT `fk_program_has_shows_program1`
+    FOREIGN KEY (`id_pr`)
+    REFERENCES `circusss`.`program` (`id_pr`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_program_has_shows_shows1`
+    FOREIGN KEY (`id_shows`)
+    REFERENCES `circusss`.`shows` (`id_shows`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

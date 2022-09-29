@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS `circusss`.`workers` (
+  `id_workers` INT NOT NULL AUTO_INCREMENT,
+  `surname` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NULL,
+  `second_name` VARCHAR(45) NULL,
+  `date_birth` INT NULL,
+  `date_work` INT NULL,
+  `years` INT NULL,
+  `post` VARCHAR(45) NULL,
+  `male` CHAR(3) NULL,
+  `address` VARCHAR(50) NULL,
+  `city_worker` VARCHAR(45) NULL,
+  `phone` VARCHAR(20) NULL,
+  PRIMARY KEY (`id_workers`))
+ENGINE = InnoDB;
